@@ -21,18 +21,13 @@
    */
   function rel(key, options) {
     var self = this
-      , singularize, pluralize;
+      , singularize;
 
     options = options || {};
 
     // poor singularize fallback
     singularize = _.singularize || function (word) {
       return word.replace(/s$/, '');
-    };
-
-    // poor pluralize fallback
-    pluralize = _.pluralize || function (word) {
-      return word.replace(/$/, 's');
     };
 
     function handleHasMany() {
