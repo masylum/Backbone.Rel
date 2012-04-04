@@ -8,24 +8,48 @@ Backbone.Rel exposes a method `rel` that is a relationship *getter*.
 You can implement your `hasMany` and `belongsTo` like in this example:
 
 ``` javascript
+// models/project.js
+Models.Project.hasMany = function () {
+  return {
+    users: {collection: Collections.users, id: 'project_id'}
+  , tasks: {collection: Collection.tasks, filter: function (task) {
+      return task.rel('project') = this;
+    }}
+  };
+};
+
+// models/user.js
 Models.User.hasMany = function () {
   return {
     tasks: {collection: Collections.tasks, id: 'user_id'}
   };
 };
 
-Models.Task.belongsTo = function () {
+Models.User.belongsTo = function () {
   return {
-    user: Collections.users
+    project: Collection.projects
   };
 };
 
-var user = new User({id: 1})
+// models/task.js
+Models.Task.belongsTo = function () {
+  return {
+    user: Collections.users
+  , project: function (task) {
+      return Collection.projects.get(task.rel('user').project);
+    }
+  };
+};
+
+var project = new Project({id: 1})
+  , user = new User({id: 1, project_id: 1})
   , task1 = new Task({id: 1, user_id: 1})
   , task2 = new Task({id: 2, user_id: 1});
 
 assert.equal(user.rel('tasks').length, 2);
+assert.equal(user.rel('project'), project);
 assert.equal(task1.rel('user'), user);
+assert.equal(task1.rel('project'), project);
 ```
 
 ## Dependencies

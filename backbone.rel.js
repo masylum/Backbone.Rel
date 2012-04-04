@@ -21,7 +21,21 @@
    */
   function rel(key, options) {
     var self = this
+      , keys = key.split('.')
       , singularize;
+
+    // kind of monadic accesor
+    if (keys.length > 1) {
+      return _.reduce(keys, function (memo, key) {
+        if (typeof memo === 'undefined') {
+          return self.rel(key);
+        } else if (memo) {
+          return memo.rel(key);
+        } else {
+          return null;
+        }
+      }, undefined);
+    }
 
     options = options || {};
 
@@ -37,10 +51,12 @@
 
       var options = self.hasMany()[key];
 
+      function filter(el) {
+        return el.get(options.id) === this.id;
+      }
+
       if (options) {
-        return options.collection.filter(function (el) {
-          return el.get(options.id) === self.id;
-        });
+        return options.collection.filter(_.bind(options.filter || filter, self));
       } else {
         return null;
       }
@@ -51,10 +67,14 @@
         return null;
       }
 
-      var collection = self.belongsTo()[key];
+      var target = self.belongsTo()[key];
 
-      if (collection) {
-        return collection.get(self.get(singularize(key) + '_id'));
+      if (target) {
+        if (_.isFunction(target)) {
+          return target(self) || null;
+        } else {
+          return target.get(self.get(singularize(key) + '_id')) || null;
+        }
       } else {
         return null;
       }
