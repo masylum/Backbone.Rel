@@ -2,10 +2,34 @@
 
 Backbone.Rel extends your Backbone models with a lightweight relationships manager.
 
-## How does it work?
+## How does it work? API
+
+### Rel
 
 Backbone.Rel exposes a method `rel` that is a relationship *getter*.
-You can implement your `hasMany` and `belongsTo` like in this example:
+
+### hasMany
+
+You can implement a `hasMany` method in your model to define a relationship.
+The method must return an object with the relation name as a key and options as a value.
+
+Options:
+
+  - `collection`: You must specify the collection.
+  - `filter`: A function that will be used to filter the collection.
+  - `id`: The foreign id pointing to your model.
+
+### belongsTo
+
+You can implement a `belongsTo` method in your model to define a relationship.
+The method must return an object with the relation name as a key and the collection as a value.
+
+## Accesing nested relationships, the "monadic" `rel` getter.
+
+You can pass as many arguments as you want to the `rel` getter in order to get nested relationships.
+Any failure on the getter chain will be properly propagated, avoiding `TypeError: Cannot call method 'foo' of null`.
+
+## Example
 
 ``` javascript
 // models/project.js
@@ -13,7 +37,7 @@ Models.Project.hasMany = function () {
   return {
     users: {collection: Collections.users, id: 'project_id'}
   , tasks: {collection: Collection.tasks, filter: function (task) {
-      return task.rel('project') = this;
+      return task.rel('project') ? task.rel('project').id === this.id : null;
     }}
   };
 };
@@ -36,7 +60,7 @@ Models.Task.belongsTo = function () {
   return {
     user: Collections.users
   , project: function (task) {
-      return Collection.projects.get(task.rel('user').project);
+      return task.rel('user.project');
     }
   };
 };

@@ -16,10 +16,9 @@
    * Computes and gets the relationship
    *
    * @param {String} key
-   * @param {Object} options
    * @return {Model|Array|Null}
    */
-  function rel(key, options) {
+  function rel(key) {
     var self = this
       , keys = key.split('.')
       , singularize;
@@ -36,8 +35,6 @@
         }
       }, undefined);
     }
-
-    options = options || {};
 
     // poor singularize fallback
     singularize = _.singularize || function (word) {
