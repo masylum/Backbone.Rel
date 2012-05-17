@@ -10,7 +10,7 @@ Backbone.Rel exposes a method `rel` that is a relationship *getter*.
 
 ### hasMany
 
-You can implement a `hasMany` method in your model to define a relationship.
+You can implement a `hasMany` method in a `Model` to define a relationship.
 The method must return an object with the relation name as a key and options as a value.
 
 Options:
@@ -21,8 +21,11 @@ Options:
 
 ### belongsTo
 
-You can implement a `belongsTo` method in your model to define a relationship.
+You can implement a `belongsTo` method in a `Model` or a `Collection` to define a relationship.
 The method must return an object with the relation name as a key and the collection as a value.
+
+If you want to define a `belongsTo` relationship on a collection you have to store the key
+on the collection object in your `initialize`.
 
 ## Accesing nested relationships, the "monadic" `rel` getter.
 
