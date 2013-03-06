@@ -27,7 +27,7 @@ The method must return an object with the relation name as a key and the collect
 If you want to define a `belongsTo` relationship on a collection you have to store the key
 on the collection object in your `initialize`.
 
-## Accesing nested relationships, the "monadic" `rel` getter.
+## Accessing nested relationships, the "monadic" `rel` getter.
 
 You can pass as many arguments as you want to the `rel` getter in order to get nested relationships.
 Any failure on the getter chain will be properly propagated, avoiding `TypeError: Cannot call method 'foo' of null`.
