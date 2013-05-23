@@ -2,7 +2,7 @@ module.exports = (function () {
   var _ = require('underscore')
     , Models = {}
     , Collections = {}
-    , users, tasks, projects;
+    , users, tasks, projects, comments;
 
   GLOBAL.Backbone = require('backbone');
   require('../backbone.rel');
@@ -14,6 +14,11 @@ module.exports = (function () {
       , project: function (task) {
           return task.rel('user.project');
         }
+      };
+    }
+  , hasMany: function () {
+      return {
+        comments: {collection: comments, id: 'task_id'}
       };
     }
   });
@@ -54,6 +59,14 @@ module.exports = (function () {
     }
   });
 
+  Models.Comment = Backbone.Model.extend({
+    belongsTo: function () {
+      return {
+        task: tasks
+      };
+    }
+  });
+
   Collections.Users = Backbone.Collection.extend({
     model: Models.User
   });
@@ -64,6 +77,10 @@ module.exports = (function () {
 
   Collections.Tasks = Backbone.Collection.extend({
     model: Models.Task
+  });
+
+  Collections.Comments = Backbone.Collection.extend({
+    model: Models.Comment
   });
 
   function instance() {
@@ -87,10 +104,20 @@ module.exports = (function () {
     , {id: 5, user_id: 1}
     ]);
 
+    comments = new Collections.Comments([
+      {id: 1, task_id: 1}
+    , {id: 2, task_id: 1}
+    , {id: 3, task_id: 2}
+    , {id: 4, task_id: 2}
+    , {id: 5, task_id: 3}
+    , {id: 6, task_id: 3}
+    ]);
+
     return {
       projects: projects
     , users: users
     , tasks: tasks
+    , comments: comments
     };
   }
 
