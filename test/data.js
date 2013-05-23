@@ -110,7 +110,7 @@ module.exports = (function () {
     , {id: 3, task_id: 2}
     , {id: 4, task_id: 2}
     , {id: 5, task_id: 3}
-    , {id: 6, task_id: 3}
+    , {id: 6, task_id: 4}
     ]);
 
     return {
