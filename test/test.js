@@ -83,6 +83,10 @@ describe('Rel', function () {
     it('returns the user tasks owners for a given user', function () {
       assert.deepEqual(_.pluck(users.get(0).rel('tasks.user'), 'id'), [0, 0]);
     });
+
+    it('returns the comments of all user tasks', function () {
+      assert.deepEqual(_.pluck(users.get(0).rel('tasks.comments'), 'id'), [3, 4, 6]);
+    });
   });
 
   describe('Collections', function () {
