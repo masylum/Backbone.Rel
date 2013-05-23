@@ -79,6 +79,10 @@ describe('Rel', function () {
         assert.deepEqual(projects.get(1).rel('owner'), users.get(0));
       });
     });
+
+    it('returns the user tasks owners for a given user', function () {
+      assert.deepEqual(_.pluck(users.get(0).rel('tasks.user'), 'id'), [0, 0]);
+    });
   });
 
   describe('Collections', function () {
