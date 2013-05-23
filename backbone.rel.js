@@ -20,20 +20,21 @@
   });
 
   /**
-   * Get the relationship options
+   * Computes the caching key
    *
    * @param {Model|Collection} self
-   * @param {Model|Collection} target
    * @param {String} key
+   * @return {String}
    */
   function cacheId(self, key) {
     return [self.cid, key].join('-');
   }
 
   /**
-   * Get the relationship options
+   * Creates a handler that cleans the cache
    *
    * @param {String} cache_id
+   * @return {Function}
    */
   function expireCache(cache_id) {
     return function () {
