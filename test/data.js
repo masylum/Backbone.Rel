@@ -1,74 +1,70 @@
 module.exports = (function () {
   var _ = require('underscore')
-    , Backbone = require('backbone')
     , Models = {}
     , Collections = {}
     , users, tasks, projects;
 
+  GLOBAL.Backbone = require('backbone');
   require('../backbone.rel');
 
-  Models = {
-    Task: Backbone.Model.extend({
-      belongsTo: function () {
-        return {
-          user: users
-        , project: function (task) {
-            return task.rel('user.project');
+  Models.Task = Backbone.Model.extend({
+    belongsTo: function () {
+      return {
+        user: users
+      , project: function (task) {
+          return task.rel('user.project');
+        }
+      };
+    }
+  });
+
+  Models.User = Backbone.Model.extend({
+    hasMany: function () {
+      return {
+        tasks: {collection: tasks, id: 'user_id'}
+      , owned_projects: {collection: projects, id: 'owner_id'}
+      };
+    }
+  , belongsTo: function () {
+      return {
+        project: projects
+      };
+    }
+  });
+
+  Models.Project = Backbone.Model.extend({
+    belongsTo: function () {
+      return {
+        owner: function (project) {
+          var owner_id = project.get('owner_id');
+          return _.isNumber(owner_id) && users.get(owner_id);
+        }
+      };
+    }
+  , hasMany: function () {
+      return {
+        users: {collection: users, id: 'project_id'}
+      , tasks: {collection: tasks, filter: function (task) {
+            return task.rel('project')
+              ? task.rel('project').id === this.id
+              : null;
           }
-        };
-      }
-    }),
+        }
+      };
+    }
+  });
 
-    User: Backbone.Model.extend({
-      hasMany: function () {
-        return {
-          tasks: {collection: tasks, id: 'user_id'}
-        , owned_projects: {collection: projects, id: 'owner_id'}
-        };
-      },
-      belongsTo: function () {
-        return {
-          project: projects
-        };
-      }
-    }),
+  Collections.Users = Backbone.Collection.extend({
+    model: Models.User
+  });
 
-    Project: Backbone.Model.extend({
-      belongsTo: function () {
-        return {
-          owner: function (project) {
-            var owner_id = project.get('owner_id');
-            return _.isNumber(owner_id) && users.get(owner_id);
-          }
-        };
-      },
-      hasMany: function () {
-        return {
-          users: {collection: users, id: 'project_id'},
-          tasks: {collection: tasks, filter: function (task) {
-              return task.rel('project')
-                ? task.rel('project').id === this.id
-                : null;
-            }
-          }
-        };
-      }
-    })
-  };
+  Collections.Projects = Backbone.Collection.extend({
+    model: Models.Project
+  });
 
-  Collections = {
-    Users: Backbone.Collection.extend({
-      model: Models.User
-    }),
-
-    Projects: Backbone.Collection.extend({
-      model: Models.Project
-    }),
-
-    Tasks: Backbone.Collection.extend({
-      model: Models.Task
-    })
-  };
+  Collections.Tasks = Backbone.Collection.extend({
+    model: Models.Task
+  });
 
   function instance() {
     projects = new Collections.Projects([
@@ -92,15 +88,15 @@ module.exports = (function () {
     ]);
 
     return {
-      projects: projects,
-      users: users,
-      tasks: tasks
+      projects: projects
+    , users: users
+    , tasks: tasks
     };
   }
 
   return {
-    Collections: Collections,
-    Models: Models,
-    instance: instance
+    Collections: Collections
+  , Models: Models
+  , instance: instance
   };
 })();
