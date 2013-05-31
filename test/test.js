@@ -25,14 +25,6 @@ describe('Rel', function () {
         assert.deepEqual(_.pluck(users.get(2).rel('tasks'), 'id'), []);
       });
 
-      it('should expire the cache', function () {
-        assert.deepEqual(_.pluck(users.get(0).rel('tasks'), 'id'), [2, 4]);
-        tasks.add({id: 6, user_id: 0}, {silent: true});
-        assert.deepEqual(_.pluck(users.get(0).rel('tasks'), 'id'), [2, 4]);
-        tasks.add({id: 7, user_id: 0});
-        assert.deepEqual(_.pluck(users.get(0).rel('tasks'), 'id'), [2, 4, 6, 7]);
-      });
-
       it('returns the owned projects for a given user', function () {
         assert.deepEqual(_.pluck(users.get(0).rel('owned_projects'), 'id'), [0, 1]);
         assert.deepEqual(users.get(1).rel('owned_projects'), []);
