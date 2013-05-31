@@ -7,7 +7,6 @@
 
   var singularize
     , root = this
-    , cache = {}
     , _ = root._;
 
   if (!_ && (typeof require !== 'undefined')) {
@@ -18,29 +17,6 @@
   singularize = _.memoize(_.singularize || function (word) {
     return word.replace(/s$/, '');
   });
-
-  /**
-   * Computes the caching key
-   *
-   * @param {Model|Collection} self
-   * @param {String} key
-   * @return {String}
-   */
-  function cacheId(self, key) {
-    return [self.cid, key].join('-');
-  }
-
-  /**
-   * Creates a handler that cleans the cache
-   *
-   * @param {String} cache_id
-   * @return {Function}
-   */
-  function expireCache(cache_id) {
-    return function () {
-      delete cache[cache_id];
-    };
-  }
 
   /**
    * Get the relationship options
@@ -126,8 +102,7 @@
    * @return {Array<Model>|Null}
    */
   RelHandler.prototype.handleHasMany = function () {
-    var options = getOptions(this.self, 'hasMany', this.key)
-      , cache_id;
+    var options = getOptions(this.self, 'hasMany', this.key);
 
     function filter(el) {
       return el.get(options.id) === this.id;
@@ -141,14 +116,7 @@
       throw Error('No collection was given');
     }
 
-    cache_id = cacheId(this.self, this.key);
-
-    if (!cache[cache_id]) {
-      cache[cache_id] = options.collection.filter(_.bind(options.filter || filter, this.self));
-      options.collection.bind('all', expireCache(cache_id));
-    }
-
-    return cache[cache_id];
+    return options.collection.filter(_.bind(options.filter || filter, this.self));
   };
 
   /**
