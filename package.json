@@ -1,7 +1,7 @@
 {
   "name": "backbone.rel",
   "description": "Lightweight relationship assistant for your backbone applications",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "author": "Pau ramon <masylum@gmail.com>",
   "contributors": ["Maxim lolls <collsmaxim@gmail.com>"],
   "keywords": ["backbone", "relations", "ender", "teambox"],

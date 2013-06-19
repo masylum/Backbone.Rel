@@ -32,6 +32,16 @@ on the collection object in your `initialize`.
 You can pass as many arguments as you want to the `rel` getter in order to get nested relationships.
 Any failure on the getter chain will be properly propagated, avoiding `TypeError: Cannot call method 'foo' of null`.
 
+## Accessing attributes inside the relations
+
+Most of the errors on working with relational data is when a relation is not met and we try to access a attribute
+of that inexistant model. For instance, we have a task that belong to a project and we want to get that projects name.
+
+```js
+task.relGet('project', 'name', 'Unknown project'); // It will show the project name or 'Unkown project'
+user.relGet('project.tasks', 'name', []); // It will return all tasks names or []
+```
+
 ## Example
 
 ``` javascript

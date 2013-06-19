@@ -120,6 +120,30 @@
   };
 
   /**
+   * Gets an attribute over a relation
+   *
+   * @param {String} relation
+   * @param {String} attribute
+   * @param {<A>} default_value
+   * @return {<A>}
+   */
+  function relGet(relation, attribute, default_value) {
+    var rel = this.rel(relation);
+
+    if (rel) {
+      if (_.isArray(rel)) {
+        return _.map(rel, function (r) {
+          return r.get(attribute);
+        });
+      } else {
+        return rel.get(attribute);
+      }
+    } else {
+      return default_value || null;
+    }
+  }
+
+  /**
    * Computes and gets the relationship
    *
    * @param {String} type [Collection|Model]
@@ -149,7 +173,7 @@
     };
   }
 
-  _.extend(Backbone.Model.prototype, {rel: rel('Model')});
-  _.extend(Backbone.Collection.prototype, {rel: rel('Collection')});
+  _.extend(Backbone.Model.prototype, {rel: rel('Model'), relGet: relGet});
+  _.extend(Backbone.Collection.prototype, {rel: rel('Collection'), relGet: relGet});
 
 }());

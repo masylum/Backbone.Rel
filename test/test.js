@@ -40,6 +40,12 @@ describe('Rel', function () {
         assert.deepEqual(_.pluck(projects.get(0).rel('users'), 'id'), [0]);
         assert.deepEqual(_.pluck(projects.get(1).rel('users'), 'id'), [1]);
       });
+
+      it('returns the tasks names for a given user', function () {
+        assert.deepEqual(users.get(0).relGet('tasks', 'name'), ['task3', 'task5']);
+        assert.deepEqual(users.get(1).relGet('tasks', 'name'), ['task2', 'task4', 'task6']);
+        assert.deepEqual(users.get(2).relGet('tasks', 'name'), []);
+      });
     });
 
     describe('belongsTo', function () {
@@ -70,6 +76,13 @@ describe('Rel', function () {
         assert.deepEqual(projects.get(0).rel('owner'), users.get(0));
         assert.deepEqual(projects.get(1).rel('owner'), users.get(0));
       });
+
+      it('returns the project name for a given user', function () {
+        assert.equal(users.get(0).relGet('project', 'name'), 'project1');
+        assert.equal(users.get(1).relGet('project', 'name'), 'project2');
+        assert.deepEqual(users.get(2).relGet('project', 'name', 'hihi'), 'hihi');
+        assert.deepEqual(users.get(2).relGet('project', 'name'), null);
+      });
     });
 
     it('returns the user tasks owners for a given user', function () {
@@ -78,6 +91,10 @@ describe('Rel', function () {
 
     it('returns the comments of all user tasks', function () {
       assert.deepEqual(_.pluck(users.get(0).rel('tasks.comments'), 'id'), [3, 4, 6]);
+    });
+
+    it('returns the comment names of all user tasks', function () {
+      assert.deepEqual(users.get(0).relGet('tasks.comments', 'name'), ['comment3', 'comment4', 'comment6']);
     });
   });
 
