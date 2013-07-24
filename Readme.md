@@ -42,6 +42,15 @@ task.relGet('project', 'name', 'Unknown project'); // It will show the project n
 user.relGet('project.tasks', 'name', []); // It will return all tasks names or []
 ```
 
+## Invoking methods inside relations
+
+Sometimes we want to invoke a method or access an attribute through a relation. `relResult` is a wrapper of `_.result`
+on a relation.
+
+```js
+task.relResult('project', 'fullName', 'Unknown project'); // It will call project.fullName if the relation succeded
+```
+
 ## Example
 
 ``` javascript

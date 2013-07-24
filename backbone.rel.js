@@ -127,6 +127,30 @@
    * @param {<A>} default_value
    * @return {<A>}
    */
+  function relResult(relation, attribute, default_value) {
+    var rel = this.rel(relation);
+
+    if (rel) {
+      if (_.isArray(rel)) {
+        return _.map(rel, function (r) {
+          return _.result(r, attribute);
+        });
+      } else {
+        return _.result(rel, attribute);
+      }
+    } else {
+      return default_value || null;
+    }
+  }
+
+  /**
+   * Gets an attribute over a relation
+   *
+   * @param {String} relation
+   * @param {String} attribute
+   * @param {<A>} default_value
+   * @return {<A>}
+   */
   function relGet(relation, attribute, default_value) {
     var rel = this.rel(relation);
 
@@ -160,7 +184,9 @@
           if (_.isUndefined(memo)) {
             return self.rel(key);
           } else if (_.isArray(memo)) {
-            return _.flatten(_.map(memo, function (item) { return item.rel(key); }));
+            return _.flatten(_.map(memo, function (item) {
+              return item.rel(key);
+            }));
           } else if (memo) {
             return memo.rel(key);
           } else {
@@ -173,7 +199,7 @@
     };
   }
 
-  _.extend(Backbone.Model.prototype, {rel: rel('Model'), relGet: relGet});
-  _.extend(Backbone.Collection.prototype, {rel: rel('Collection'), relGet: relGet});
+  _.extend(Backbone.Model.prototype, {rel: rel('Model'), relGet: relGet, relResult: relResult});
+  _.extend(Backbone.Collection.prototype, {rel: rel('Collection'), relGet: relGet, relResult: relResult});
 
 }());

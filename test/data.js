@@ -57,6 +57,9 @@ module.exports = (function () {
         }
       };
     }
+  , fullName: function () {
+      return 'Project ' + this.get('name');
+    }
   });
 
   Models.Comment = Backbone.Model.extend({

@@ -83,6 +83,13 @@ describe('Rel', function () {
         assert.deepEqual(users.get(2).relGet('project', 'name', 'hihi'), 'hihi');
         assert.deepEqual(users.get(2).relGet('project', 'name'), null);
       });
+
+      it('returns the project `full name` for a given user', function () {
+        assert.equal(users.get(0).relResult('project', 'fullName'), 'Project project1');
+        assert.equal(users.get(1).relResult('project', 'fullName'), 'Project project2');
+        assert.deepEqual(users.get(2).relResult('project', 'fullName', 'hihi'), 'hihi');
+        assert.deepEqual(users.get(2).relResult('project', 'fullName'), null);
+      });
     });
 
     it('returns the user tasks owners for a given user', function () {
