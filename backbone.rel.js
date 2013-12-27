@@ -206,7 +206,7 @@
     };
   }
 
-  _.extend(Backbone.Model.prototype, {rel: rel('Model'), relGet: relGet, relResult: relResult, relEventBus: false});
-  _.extend(Backbone.Collection.prototype, {rel: rel('Collection'), relGet: relGet, relResult: relResult, relEventBus: false});
+  _.extend(Backbone.Model.prototype, {rel: rel('Model'), relGet: relGet, relResult: relResult, relEventBus: null});
+  _.extend(Backbone.Collection.prototype, {rel: rel('Collection'), relGet: relGet, relResult: relResult, relEventBus: null});
 
 }());

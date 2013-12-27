@@ -9,13 +9,7 @@ var _ = require('underscore')
 describe('Rel', function () {
   var users
     , projects
-    , tasks
-    , EventBus = data.EventBus
-    , events_triggered = [];
-
-  EventBus.bind('backbone-rel:missing', function (resource, id) {
-    events_triggered.push([resource, id]);
-  });
+    , tasks;
 
   beforeEach(function () {
     var instance = data.instance(1);
@@ -101,6 +95,12 @@ describe('Rel', function () {
 
 
       describe('event bus', function () {
+        var EventBus = data.EventBus
+        , events_triggered = [];
+
+        EventBus.bind('backbone-rel:missing', function (resource, id) {
+          events_triggered.push([resource, id]);
+        });
 
         beforeEach(function () {
           events_triggered = [];
