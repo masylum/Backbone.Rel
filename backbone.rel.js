@@ -80,17 +80,28 @@
    * @return {Model|Null}
    */
   RelHandler.prototype.handleBelongsTo = function () {
-    var collection = getOptions(this.self, 'belongsTo', this.key)
-      , result;
+    var options = getOptions(this.self, 'belongsTo', this.key)
+      , collection
+      , eventBus
+      , result
+      , id;
 
-    if (!collection) {
+    if (!options) {
       return null;
     }
 
-    if (_.isFunction(collection)) {
+    if (_.isFunction(options)) {
+      collection = options;
       result = collection(this.self);
     } else {
-      result = collection.get(this.findBelongsToIdAttribute());
+      collection = (options.collection || options);
+      eventBus = options.bus;
+      id = this.findBelongsToIdAttribute();
+
+      result = collection.get(id);
+      if (eventBus && !result) {
+        eventBus.trigger && eventBus.trigger('backbone-rel:missing', this.key, id);
+      }
     }
 
     return result || null;
