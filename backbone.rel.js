@@ -81,7 +81,9 @@
    */
   RelHandler.prototype.handleBelongsTo = function () {
     var collection = getOptions(this.self, 'belongsTo', this.key)
-      , result;
+      , eventBus = this.self.relEventBus
+      , result
+      , id;
 
     if (!collection) {
       return null;
@@ -90,7 +92,12 @@
     if (_.isFunction(collection)) {
       result = collection(this.self);
     } else {
-      result = collection.get(this.findBelongsToIdAttribute());
+      id = this.findBelongsToIdAttribute();
+      result = collection.get(id);
+
+      if (eventBus && !result) {
+        eventBus.trigger && eventBus.trigger('backbone-rel:missing', this.key, id);
+      }
     }
 
     return result || null;
@@ -199,7 +206,7 @@
     };
   }
 
-  _.extend(Backbone.Model.prototype, {rel: rel('Model'), relGet: relGet, relResult: relResult});
-  _.extend(Backbone.Collection.prototype, {rel: rel('Collection'), relGet: relGet, relResult: relResult});
+  _.extend(Backbone.Model.prototype, {rel: rel('Model'), relGet: relGet, relResult: relResult, relEventBus: null});
+  _.extend(Backbone.Collection.prototype, {rel: rel('Collection'), relGet: relGet, relResult: relResult, relEventBus: null});
 
 }());

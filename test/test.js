@@ -1,4 +1,4 @@
-/*global it, describe, before, beforeEach*/
+/*global it, describe, afterEach, before, beforeEach*/
 var _ = require('underscore')
   , data = require('./data')
   , assert = require('assert')
@@ -7,7 +7,9 @@ var _ = require('underscore')
 
 // lengths
 describe('Rel', function () {
-  var users, projects, tasks;
+  var users
+    , projects
+    , tasks;
 
   beforeEach(function () {
     var instance = data.instance(1);
@@ -89,6 +91,42 @@ describe('Rel', function () {
         assert.equal(users.get(1).relResult('project', 'fullName'), 'Project project2');
         assert.deepEqual(users.get(2).relResult('project', 'fullName', 'hihi'), 'hihi');
         assert.deepEqual(users.get(2).relResult('project', 'fullName'), null);
+      });
+
+
+      describe('event bus', function () {
+        var EventBus = data.EventBus
+        , events_triggered = [];
+
+        EventBus.bind('backbone-rel:missing', function (resource, id) {
+          events_triggered.push([resource, id]);
+        });
+
+        beforeEach(function () {
+          events_triggered = [];
+        });
+
+        describe('if a rel is missing', function () {
+          var user, missing_project;
+
+          beforeEach(function () {
+            missing_project = projects.get(0);
+            projects.remove(missing_project);
+            user = users.get(0);
+          });
+
+          afterEach(function () {
+            projects.add(missing_project);
+          });
+
+          it('triggers a "backbone-rel:missing" event on the event bus', function () {
+            user.rel('project');
+
+            assert.equal(events_triggered.length, 1);
+            assert.equal(events_triggered[0][0], 'project');
+            assert.equal(events_triggered[0][1], 0);
+          });
+        });
       });
     });
 

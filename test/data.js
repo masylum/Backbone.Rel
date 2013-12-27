@@ -2,10 +2,16 @@ module.exports = (function () {
   var _ = require('underscore')
     , Models = {}
     , Collections = {}
+    , EventBus = {}
     , users, tasks, projects, comments;
 
   GLOBAL.Backbone = require('backbone');
   require('../backbone.rel');
+
+  _.extend(EventBus, Backbone.Events);
+
+  Backbone.Model.prototype.relEventBus = EventBus;
+  Backbone.Collection.prototype.relEventBus = EventBus;
 
   Models.Task = Backbone.Model.extend({
     belongsTo: function () {
@@ -128,5 +134,6 @@ module.exports = (function () {
     Collections: Collections
   , Models: Models
   , instance: instance
+  , EventBus: EventBus
   };
 })();
