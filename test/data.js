@@ -10,6 +10,9 @@ module.exports = (function () {
 
   _.extend(EventBus, Backbone.Events);
 
+  Backbone.Model.prototype.relEventBus = EventBus;
+  Backbone.Collection.prototype.relEventBus = EventBus;
+
   Models.Task = Backbone.Model.extend({
     belongsTo: function () {
       return {
@@ -35,7 +38,7 @@ module.exports = (function () {
     }
   , belongsTo: function () {
       return {
-        project: { collection: projects, bus: EventBus }
+        project: projects
       };
     }
   });
