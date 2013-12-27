@@ -119,6 +119,10 @@
       return null;
     }
 
+    if (_.isFunction(options)) {
+      return options(this.self);
+    }
+
     if (!options.collection) {
       throw Error('No collection was given');
     }
