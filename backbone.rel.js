@@ -95,7 +95,7 @@
       id = this.findBelongsToIdAttribute();
       result = collection.get(id);
 
-      if (eventBus && !result) {
+      if (eventBus && _.isNumber(id) && !result) {
         eventBus.trigger && eventBus.trigger('backbone-rel:missing', this.key, id);
       }
     }

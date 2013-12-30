@@ -127,6 +127,26 @@ describe('Rel', function () {
             assert.equal(events_triggered[0][1], 0);
           });
         });
+
+        describe('if association_id is not present', function () {
+          var user, missing_project;
+
+          beforeEach(function () {
+            user = users.get(0);
+            user.set({project_id: null}, {silent: true});
+          });
+
+          afterEach(function () {
+            user = users.get(0);
+            user.set({project_id: 0}, {silent: true});
+          });
+
+          it('does not trigger a "backbone-rel:missing" event on the event bus', function () {
+            user.rel('project');
+
+            assert.equal(events_triggered.length, 0);
+          });
+        });
       });
     });
 
