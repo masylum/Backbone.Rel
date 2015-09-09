@@ -109,11 +109,8 @@
    * @return {Array<Model>|Null}
    */
   RelHandler.prototype.handleHasMany = function () {
-    var options = getOptions(this.self, 'hasMany', this.key);
-
-    function filter(el) {
-      return el.get(options.id) === this.id;
-    }
+    var options = getOptions(this.self, 'hasMany', this.key)
+      , where = {};
 
     if (!options) {
       return null;
@@ -127,7 +124,16 @@
       throw Error('No collection was given');
     }
 
-    return options.collection.filter(_.bind(options.filter || filter, this.self));
+    if (options.filter) {
+      return options.collection.filter(_.bind(options.filter, this.self));
+    }
+
+    if (options.id) {
+      where[options.id] = this.self.id;
+      return options.collection.where(where);
+    }
+
+    throw Error('Unknown options');
   };
 
   /**
