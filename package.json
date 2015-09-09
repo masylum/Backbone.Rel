@@ -2,10 +2,14 @@
   "name": "backbone.rel",
   "description": "Lightweight relationship assistant for your backbone applications",
   "version": "0.2.4",
-  "author": "Pau ramon <masylum@gmail.com>",
+  "author": "Pau Ramon <masylum@gmail.com>",
   "contributors": ["Maxim Colls <collsmaxim@gmail.com>", "Saimon Moore <saimonmoore@gmail.com>"],
   "keywords": ["backbone", "relations", "ender", "teambox"],
   "repository": {"type": "git", "url": "git://github.com/masylum/Backbone.Rel.git"},
-  "devDependencies": {"backbone": "0.5.3", "underscore": "*", "mocha": "*"},
-  "main": "./backbone.rel.js"
+  "main": "./backbone.rel.js",
+  "devDependencies": {
+    "backbone": "^1.0.0",
+    "underscore": "^1.5.0",
+    "mocha": "*"
+  }
 }
