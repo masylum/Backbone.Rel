@@ -1,6 +1,6 @@
 # Backbone.Rel
 
-![](https://api.travis-ci.org/masylum/backbone.rel) <a href='http://redbooth.com' target='_blank'>![](https://www.dropbox.com/s/qo4yp1tpbsvqfya/made-at-redbooth-blue.svg?dl=1)</a>
+![](https://api.travis-ci.org/masylum/Backbone.Rel.svg) <a href='http://redbooth.com' target='_blank'>![](https://www.dropbox.com/s/qo4yp1tpbsvqfya/made-at-redbooth-blue.svg?dl=1)</a>
 
 Backbone.Rel extends your Backbone models with a lightweight relationships manager.
 
@@ -110,7 +110,7 @@ You must have node installed in order to run the tests.
 
 ```
 npm install
-make
+npm test
 ```
 
 ## License
