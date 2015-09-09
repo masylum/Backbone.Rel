@@ -7,6 +7,9 @@
   "keywords": ["backbone", "relations", "ender", "teambox"],
   "repository": {"type": "git", "url": "git://github.com/masylum/Backbone.Rel.git"},
   "main": "./backbone.rel.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec test/test"
+  },
   "devDependencies": {
     "backbone": "^1.0.0",
     "underscore": "^1.5.0",
